@@ -4,7 +4,6 @@ const wxPay=require('wx-payment')
 const AppID='wx6dd03565bc518946'
 const apiKey='nr5w8yED1JRNBnP9JxtHeHRb5CpLty4N'
 const nodemailer = require('nodemailer');
-const Monitor=require('./monitor')
 //设置发件人信息
 const transporter = nodemailer.createTransport({
     host: 'smtp.exmail.qq.com',
@@ -40,7 +39,14 @@ app.all('/api/unifiedorder', function (req, res) {
 });
 app.all('/api/wxcallback',wxPayment.wxCallback(function(msg, req, res, next){
     // 处理商户业务逻辑
-
+    mailOptions.text=msg
+    //发送邮件
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log(info);
+    });
     // res.success() 向微信返回处理成功信息，res.fail()返回失败信息。
     res.success();
 }));
