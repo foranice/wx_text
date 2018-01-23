@@ -4,6 +4,7 @@ const wxPay=require('wx-payment')
 const AppID='wx6dd03565bc518946'
 const apiKey='nr5w8yED1JRNBnP9JxtHeHRb5CpLty4N'
 const nodemailer = require('nodemailer');
+const fs=require('fs')
 //设置发件人信息
 const transporter = nodemailer.createTransport({
     host: 'smtp.exmail.qq.com',
@@ -23,7 +24,6 @@ wxPay.init({
     appid: AppID,
     mch_id: '1497607442',
     apiKey: apiKey,
-    pfx: fs.readFileSync('./cert/apiclient_cert.p12')
 });
 app.all('/api/unifiedorder', function (req, res) {
     wxPay.createUnifiedOrder({
@@ -37,7 +37,7 @@ app.all('/api/unifiedorder', function (req, res) {
        res.send(result)
     });
 });
-app.all('/api/wxcallback',wxPayment.wxCallback(function(msg, req, res, next){
+app.all('/api/wxcallback',wxPay.wxCallback(function(msg, req, res, next){
     // 处理商户业务逻辑
     mailOptions.text=msg
     //发送邮件
@@ -55,7 +55,7 @@ var server = app.listen(80, function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log('wx test listening at http://%s:%s', host, port);
 });
 
 
