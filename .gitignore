@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/inspectionProfiles/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/wx_text.iml
+node_modules/
+npm-debug.log
+yarn.lock
