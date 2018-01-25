@@ -47,6 +47,8 @@ app.all('/api/unifiedorder', function (req, res) {
         trade_type: 'APP',
         sign_type:'MD5'
     }, function(err, result){
+        console.log('创建订单结果')
+        console.log(result)
        res.json(result)
     });
 });
@@ -54,6 +56,8 @@ app.all('/api/wxcallback',wxPay.wxCallback(function(msg, req, res, next){
     // 处理商户业务逻辑
     mailOptions.text=msg
     //发送邮件
+    console.log('微信支付结果')
+    console.log(msg)
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
