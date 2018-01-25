@@ -2,7 +2,7 @@ const express =require('express')
 const app=express()
 const wxPay=require('wx-payment')
 const AppID='wx6dd03565bc518946'
-const apiKey='nr5w8yED1JRNBnP9JxtHeHRb5CpLty4N'
+const apiKey='7hWedecKi9NN7jw8FMsheSw4NqfufkIv'
 const nodemailer = require('nodemailer');
 const fs=require('fs')
 //设置发件人信息
@@ -26,13 +26,26 @@ wxPay.init({
     apiKey: apiKey,
 });
 app.all('/api/unifiedorder', function (req, res) {
+    if(!req.query.body){
+        res.status(400).send('param body is required')
+        return
+    }
+    if(!req.query.spbill_create_ip){
+        res.status(400).send('param spbill_create_ip is required')
+        return
+    }
+    if(!req.query.total_fee){
+        res.status(400).send('param total_fee is required')
+        return
+    }
     wxPay.createUnifiedOrder({
-        body: '支付测试', // 商品或支付单简要描述
-        out_trade_no: (Math.random()).toString(35).substr(2)+new Date().getTime(), // 商户系统内部的订单号,32个字符内、可包含字母
-        total_fee: 1,
-        spbill_create_ip: '114.246.65.215',
+        body: req.query.body, // 商品或支付单简要描述
+        out_trade_no:(new Date().getTime()+ Math.random().toString(30).substr(2)).substr(0,30), // 商户系统内部的订单号,32个字符内、可包含字母
+        total_fee: req.query.total_fee,
+        spbill_create_ip: req.query.spbill_create_ip,
         notify_url: 'http://119.29.200.37/api/wxcallback',
         trade_type: 'APP',
+        sign_type:'MD5'
     }, function(err, result){
        res.send(result)
     });
