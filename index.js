@@ -27,15 +27,15 @@ wxPay.init({
 });
 app.all('/api/unifiedorder', function (req, res) {
     if(!req.query.body){
-        res.status(400).send('param body is required')
+        res.status(400).json({msg:'param body is required'})
         return
     }
     if(!req.query.spbill_create_ip){
-        res.status(400).send('param spbill_create_ip is required')
+        res.status(400).json({msg:'param spbill_create_ip is required'})
         return
     }
     if(!req.query.total_fee){
-        res.status(400).send('param total_fee is required')
+        res.status(400).json({msg:'param total_fee is required'})
         return
     }
     wxPay.createUnifiedOrder({
@@ -47,7 +47,7 @@ app.all('/api/unifiedorder', function (req, res) {
         trade_type: 'APP',
         sign_type:'MD5'
     }, function(err, result){
-       res.send(result)
+       res.json(result)
     });
 });
 app.all('/api/wxcallback',wxPay.wxCallback(function(msg, req, res, next){
